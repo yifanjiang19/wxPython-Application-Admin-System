@@ -2,26 +2,11 @@
 # -*- coding: UTF-8 -*-
 import asynchat
 import asyncore
-import wx
+from gui import *
+from Chapter.list_report_etc import *
+import _thread as thread
 
-class AdminFrame(wx.Frame):
-    """
-    admin window
-    """
-    def __init__(self, parent, id, title, size):
-        wx.Frame.__init__(self, parent, id, title)
-        self.SetSize(size)
-        self.Center()
-        
-        panel = wx.Panel(self, -1)
-        panel.Bind(wx.EVT_MOTION, self.OnMove) 
-        wx.StaticText(panel, -1, "Pos:", pos=(10, 12))
-        self.posCtrl = wx.TextCtrl(panel, -1, "", pos=(40, 10))
-        self.Show()
-    def OnMove(self, event):
-        pos = event.GetPosition() 
-        self.posCtrl.SetValue("%s, %s" % (pos.x, pos.y))
-            
+
 class CentralServer(asyncore.dispatcher):
     """
     Server
@@ -105,6 +90,8 @@ class SessionList(CommandHandler):
     """
     def __init__(self, server):
         self.server = server
+        self.admin = DemoFrame(self)
+        self.admin.Show()
         self.sessions = []
     
     def add(self, session):
@@ -119,6 +106,8 @@ class SessionList(CommandHandler):
         elif name in self.server.users:
             session.push(b'UserName Exist')
         # 用户名检查成功后，进入主聊天室
+        elif session in self.server.users.values():
+            session.push(b'Already Login')
         else:
             session.name = name
             session.push(b'Login Success')
@@ -129,7 +118,10 @@ class SessionList(CommandHandler):
                 print(session.name)
             print(session.server.users)
             # print(session.system.server.users)
-    def do_process_data(self, session, data):
+    def do_senddata(self, session, data):
+        data = data.split(' ')
+        data = [session.name] + data
+        self.admin.AddList(data)
         print(session)
         
 
@@ -154,23 +146,35 @@ class AdminSystem(SessionList):
     """
     def add(self, session):
         self.sessions.append(session)
-    def change_frequency(self):
+    def change_frequency(self, event):
         # broadcast to every users
-        pass
+        frequency = str(self.admin.frequencyInput.GetLineText(0))
+        self.admin.frequencyInput.Clear()
+        for session in self.sessions:
+            session.push(("frecuency " + frequency).encode("utf-8"))
     def alarm(self):
         # send data to one user
         pass
 
 if __name__ == "__main__":
-    # app = wx.App()
+    app = wx.App()
     # AdminFrame(None, -1, title="Login", size=(320, 250))
     # app.MainLoop()
     port = 6666
+    # app, admin = launch()
+    # admin = DemoFrame()
+    # admin.Show()
     sess = CentralServer(port)
+    
+    # thread.start_new_thread(app.MainLoop, ()) 
     try:
         print("chat serve run at '0.0.0.0:{0}'".format(port))
-        asyncore.loop()
+        thread.start_new_thread(asyncore.loop, ())
     except KeyboardInterrupt:
-        print("chat server exit")
+        print("chat server exit") 
+    # app.MainLoop()
+    # app = DemoApp()
+    app.MainLoop()
 
-
+class EndSession:
+    pass
