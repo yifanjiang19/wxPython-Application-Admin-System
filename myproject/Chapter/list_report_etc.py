@@ -45,7 +45,7 @@ class DemoFrame(wx.Frame):
         for row, item in enumerate(data.rows):
             index = self.list.InsertStringItem(666666666, item[0])
             for col, text in enumerate(item[1:]):
-                print(col,text)
+                # print(col,text)
                 self.list.SetStringItem(index, col+1, text)
 
             # give each item a random image
@@ -123,9 +123,9 @@ class DemoFrame(wx.Frame):
             index = temp.index(data[0])
         else:
             index = self.list.InsertItem(666666666, data[0])
-        for col, text in enumerate(data[1:]):
-            print(index,col,text)
-            self.list.SetItem(index, col, text)
+        for col, text in enumerate(data[2:]):
+            # print(index,col,text)
+            self.list.SetItem(index, col+1, text)
 
 
     def OnExit(self, evt):

@@ -4,6 +4,7 @@ import asynchat
 import asyncore
 from gui import *
 from Chapter.list_report_etc import *
+from time import sleep
 import _thread as thread
 
 
@@ -88,11 +89,13 @@ class SessionList(CommandHandler):
     """
     processing all sessions
     """
-    def __init__(self, server):
+    def __init__(self, server, freq=3):
         self.server = server
         self.admin = DemoFrame(self)
+        self.freq = freq
         self.admin.Show()
         self.sessions = []
+        thread.start_new_thread(self.get, ())
     
     def add(self, session):
         self.sessions.append(session)
@@ -114,15 +117,11 @@ class SessionList(CommandHandler):
             self.server.users[session.name] = session
             if session not in self.sessions:
                 self.add(session) 
-            for session in self.sessions:
-                print(session.name)
-            print(session.server.users)
             # print(session.system.server.users)
     def do_senddata(self, session, data):
         data = data.split(' ')
         data = [session.name] + data
         self.admin.AddList(data)
-        print(session)
         
 
     def remove(self, session):
@@ -149,9 +148,15 @@ class AdminSystem(SessionList):
     def change_frequency(self, event):
         # broadcast to every users
         frequency = str(self.admin.frequencyInput.GetLineText(0))
+        self.freq = int(frequency)
         self.admin.frequencyInput.Clear()
         for session in self.sessions:
             session.push(("frecuency " + frequency).encode("utf-8"))
+    def get(self):
+        while(1):
+            sleep(self.freq)
+            for session in self.sessions:
+                session.push(b'get')
     def alarm(self):
         # send data to one user
         pass
