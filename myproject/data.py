@@ -1,7 +1,7 @@
 
 # Just some simple data structures for the report mode listctrl examples
 
-columns = ["User ID", "血压", "呼吸", "体温"]
+columns = ["Index", "User ID", "血压", "呼吸", "体温"]
 
 rows = []
 row = [

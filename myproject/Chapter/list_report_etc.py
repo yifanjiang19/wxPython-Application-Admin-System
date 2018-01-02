@@ -8,9 +8,26 @@ class DemoFrame(wx.Frame):
                           size=(700,500))
         self.list = None
         self.editable = False
-        self.frequency = wx.StaticText(self, label="频率：", pos=(10, 10), size=(80, 25))
-        self.frequencyInput = wx.TextCtrl(self, pos=(50, 10), size=(150, 25))
-        self.sendButton = wx.Button(self, label='send', pos=(230, 10), size=(50, 30))
+        self.TextID = wx.StaticText(self, label="ID：", pos=(10, 10), size=(80, 25))
+        self.ID = wx.TextCtrl(self, pos=(50, 10), size=(50, 25))
+        self.TextFrequency = wx.StaticText(self, label="频率：", pos=(120, 10), size=(80, 25))
+        self.frequency = wx.TextCtrl(self, pos=(170, 10), size=(50, 25))
+        self.TextBloodPre = wx.StaticText(self, label="血压上下限：", pos=(10, 50), size=(80, 25))
+        self.blood_pressure_down = wx.TextCtrl(self, pos=(100, 50), size=(50, 25))
+        self.temp1 = wx.StaticText(self, label=" ~ ", pos=(150, 50), size=(25, 25))
+        self.blood_pressure_up = wx.TextCtrl(self, pos=(170, 50), size=(50, 25))
+        
+        self.TextBreath = wx.StaticText(self, label="呼吸上下限：", pos=(10, 80), size=(80, 25))
+        self.breath_down = wx.TextCtrl(self, pos=(100, 80), size=(50, 25))
+        self.temp2 = wx.StaticText(self, label=" ~ ", pos=(150, 80), size=(25, 25))
+        self.breath_up = wx.TextCtrl(self, pos=(170, 80), size=(50, 25))
+
+        self.TextTemper = wx.StaticText(self, label="体温上下限：", pos=(10, 110), size=(80, 25))
+        self.temper_down = wx.TextCtrl(self, pos=(100, 110), size=(50, 25))
+        self.temp3 = wx.StaticText(self, label=" ~ ", pos=(150, 110), size=(25, 25))
+        self.temper_up = wx.TextCtrl(self, pos=(170, 110), size=(50, 25))
+        
+        self.sendButton = wx.Button(self, label='send', pos=(230, 10), size=(50, 25))
         self.sendButton.Bind(wx.EVT_BUTTON, session.change_frequency)
         self.MakeMenu()
         self.MakeListCtrl()
@@ -31,7 +48,7 @@ class DemoFrame(wx.Frame):
             il_max = il.Add(bmp)
 
         # create the list control
-        self.list = wx.ListCtrl(self, -1, pos=(0,50), size=(800,800), style=wx.LC_REPORT|otherflags)
+        self.list = wx.ListCtrl(self, -1, pos=(0,150), size=(800,800), style=wx.LC_REPORT|otherflags)
 
         # assign the image list to it
         self.list.AssignImageList(il, wx.IMAGE_LIST_SMALL)
@@ -61,7 +78,8 @@ class DemoFrame(wx.Frame):
         self.list.SetColumnWidth(0, 120)
         self.list.SetColumnWidth(1, 120)
         self.list.SetColumnWidth(2, 120)
-        self.list.SetColumnWidth(3, wx.LIST_AUTOSIZE_USEHEADER)
+        self.list.SetColumnWidth(3, 120)
+        self.list.SetColumnWidth(4, wx.LIST_AUTOSIZE_USEHEADER)
 
         # bind some interesting events
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected, self.list)
@@ -114,7 +132,7 @@ class DemoFrame(wx.Frame):
 
     def AddList(self, data):
         temp = []
-        for i in range(666):
+        for i in range(10):
             try:
                 temp.append(self.list.GetItem(i,0).Text)
             except:
@@ -123,9 +141,17 @@ class DemoFrame(wx.Frame):
             index = temp.index(data[0])
         else:
             index = self.list.InsertItem(666666666, data[0])
-        for col, text in enumerate(data[2:]):
+            self.list.SetItem(index, 1, data[1])
+        del temp
+        for col, text in enumerate(data[3:]):
             # print(index,col,text)
-            self.list.SetItem(index, col+1, text)
+            self.list.SetItem(index, col+2, text)
+        if data[2]:
+            color = (196, 20, 27, 255)
+            self.list.SetItemBackgroundColour(index, color)
+        else:
+            color = (255, 255, 255, 255)
+            self.list.SetItemBackgroundColour(index, color)
 
 
     def OnExit(self, evt):

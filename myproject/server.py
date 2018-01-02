@@ -57,6 +57,10 @@ class ReceiveSession(asynchat.async_chat):
         except EndSession:
             self.handle_close()
 
+class EndSession:
+    pass
+
+
 class CommandHandler:
     """
     命令处理类
@@ -95,7 +99,6 @@ class SessionList(CommandHandler):
         self.freq = freq
         self.admin.Show()
         self.sessions = []
-        thread.start_new_thread(self.get, ())
     
     def add(self, session):
         self.sessions.append(session)
@@ -112,15 +115,16 @@ class SessionList(CommandHandler):
         elif session in self.server.users.values():
             session.push(b'Already Login')
         else:
+            index = len(self.sessions)
             session.name = name
-            session.push(b'Login Success')
+            session.push(('Success ' +str(index)).encode("utf-8"))
             self.server.users[session.name] = session
             if session not in self.sessions:
                 self.add(session) 
-            # print(session.system.server.users)
+        
     def do_senddata(self, session, data):
         data = data.split(' ')
-        data = [session.name] + data
+        data = [data[0]] + [session.name] + data[2:]
         self.admin.AddList(data)
         
 
@@ -147,39 +151,43 @@ class AdminSystem(SessionList):
         self.sessions.append(session)
     def change_frequency(self, event):
         # broadcast to every users
-        frequency = str(self.admin.frequencyInput.GetLineText(0))
+        Id = str(self.admin.id.GetLineText(0))
+        frequency = str(self.admin.frequency.GetLineText(0))
+        blood_pressure_up = str(self.admin.blood_pressure_up.GetLineText(0))
+        blood_pressure_down = str(self.admin.blood_pressure_down.GetLineText(0))
+        breath_up = str(self.admin.breath_up.GetLineText(0))
+        breath_down = str(self.admin.breath_down.GetLineText(0))
+        temper_up = str(self.admin.temper_up.GetLineText(0))
+        temper_down = str(self.admin.temper_down.GetLineText(0))
         self.freq = int(frequency)
-        self.admin.frequencyInput.Clear()
+        self.admin.id.Clear()
+        self.admin.frequency.Clear()
+        self.admin.blood_pressure_up.Clear()
+        self.admin.blood_pressure_down.Clear()
+        self.admin.breath_up.Clear()
+        self.admin.breath_down.Clear()
+        self.admin.temper_up.Clear()
+        self.admin.temper_down.Clear()
         for session in self.sessions:
-            session.push(("frecuency " + frequency).encode("utf-8"))
-    def get(self):
-        while(1):
-            sleep(self.freq)
-            for session in self.sessions:
-                session.push(b'get')
-    def alarm(self):
-        # send data to one user
-        pass
+            session.push(("frecuency " + id + ' '
+                            + frequency + ' '
+                            + blood_pressure_up + ' '
+                            + blood_pressure_down + ' '
+                            + breath_up + ' '
+                            + breath_down + ' '
+                            + temper_up + ' '
+                            + temper_down
+                        ).encode("utf-8"))
+
 
 if __name__ == "__main__":
-    app = wx.App()
-    # AdminFrame(None, -1, title="Login", size=(320, 250))
-    # app.MainLoop()
+    app = wx.App(False)
     port = 6666
-    # app, admin = launch()
-    # admin = DemoFrame()
-    # admin.Show()
     sess = CentralServer(port)
-    
-    # thread.start_new_thread(app.MainLoop, ()) 
     try:
         print("chat serve run at '0.0.0.0:{0}'".format(port))
         thread.start_new_thread(asyncore.loop, ())
     except KeyboardInterrupt:
         print("chat server exit") 
-    # app.MainLoop()
-    # app = DemoApp()
     app.MainLoop()
 
-class EndSession:
-    pass
