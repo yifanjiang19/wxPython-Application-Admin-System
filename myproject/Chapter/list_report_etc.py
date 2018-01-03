@@ -146,7 +146,7 @@ class DemoFrame(wx.Frame):
         for col, text in enumerate(data[3:]):
             # print(index,col,text)
             self.list.SetItem(index, col+2, text)
-        if data[2]:
+        if int(data[2]):
             color = (196, 20, 27, 255)
             self.list.SetItemBackgroundColour(index, color)
         else:

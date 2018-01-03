@@ -32,17 +32,28 @@ class Data:
         while(1):
             print("senddata")
             sleep(self.sleep_time)
-            heartbeat_freq = randint(50,110)
-            blood_pressure = randint(50, 180)
+            blood_pressure = randint(50,110)
+            breath = randint(50, 180)
             temper = randint(3500,4200)/100.0
-            alarm = 1
+            alarm = self.is_alarmed(blood_pressure, breath, temper)
+            print(alarm)
             con.write(('senddata ' + str(self.index) + ' '
                     + str(self.name) + ' ' 
                     + str(alarm) + ' '
                     + str(blood_pressure) + ' '
-                    + str(heartbeat_freq) + ' ' 
+                    + str(breath) + ' ' 
                     + str(temper) + '\r\n').encode("utf-8"))
     
+    def is_alarmed(self, blood_pressure, breath, temper):
+        if blood_pressure < self.blood_pressure_down or blood_pressure > self.blood_pressure_up:
+            return 1
+        elif breath < self.breath_down or breath > self.breath_up:
+            return 1
+        elif temper < self.temper_down or temper > self.temper_up:
+            return 1
+        else:
+            return 0
+        
     def receive(self):
         # 接受服务器的消息
         
@@ -54,6 +65,12 @@ class Data:
                 if result[0] == "frecuency":
                     try:
                         self.sleep_time = int(result[2])
+                        self.blood_pressure_up = int(result[3])
+                        self.blood_pressure_down = int(result[4])
+                        self.breath_up = int(result[5])
+                        self.breath_down = int(result[6])
+                        self.temper_up = int(result[7])
+                        self.temper_down = int(result[8])
                     except:
                         pass
                 elif result[0] == "Success":
