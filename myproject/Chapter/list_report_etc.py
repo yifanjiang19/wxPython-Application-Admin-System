@@ -9,23 +9,23 @@ class DemoFrame(wx.Frame):
         self.list = None
         self.editable = False
         self.TextID = wx.StaticText(self, label="ID：", pos=(10, 10), size=(80, 25))
-        self.ID = wx.TextCtrl(self, pos=(50, 10), size=(50, 25))
+        self.userid = wx.TextCtrl(self, pos=(50, 10), size=(50, 25))
         self.TextFrequency = wx.StaticText(self, label="频率：", pos=(120, 10), size=(80, 25))
-        self.frequency = wx.TextCtrl(self, pos=(170, 10), size=(50, 25))
+        self.frequency = wx.TextCtrl(self, -1, "1", pos=(170, 10), size=(50, 25))
         self.TextBloodPre = wx.StaticText(self, label="血压上下限：", pos=(10, 50), size=(80, 25))
-        self.blood_pressure_down = wx.TextCtrl(self, pos=(100, 50), size=(50, 25))
+        self.blood_pressure_down = wx.TextCtrl(self, -1, "100", pos=(100, 50), size=(50, 25))
         self.temp1 = wx.StaticText(self, label=" ~ ", pos=(150, 50), size=(25, 25))
-        self.blood_pressure_up = wx.TextCtrl(self, pos=(170, 50), size=(50, 25))
+        self.blood_pressure_up = wx.TextCtrl(self, -1, "180", pos=(170, 50), size=(50, 25))
         
         self.TextBreath = wx.StaticText(self, label="呼吸上下限：", pos=(10, 80), size=(80, 25))
-        self.breath_down = wx.TextCtrl(self, pos=(100, 80), size=(50, 25))
+        self.breath_down = wx.TextCtrl(self, -1, "100", pos=(100, 80), size=(50, 25))
         self.temp2 = wx.StaticText(self, label=" ~ ", pos=(150, 80), size=(25, 25))
-        self.breath_up = wx.TextCtrl(self, pos=(170, 80), size=(50, 25))
+        self.breath_up = wx.TextCtrl(self, -1, "180", pos=(170, 80), size=(50, 25))
 
         self.TextTemper = wx.StaticText(self, label="体温上下限：", pos=(10, 110), size=(80, 25))
-        self.temper_down = wx.TextCtrl(self, pos=(100, 110), size=(50, 25))
+        self.temper_down = wx.TextCtrl(self, -1, "100", pos=(100, 110), size=(50, 25))
         self.temp3 = wx.StaticText(self, label=" ~ ", pos=(150, 110), size=(25, 25))
-        self.temper_up = wx.TextCtrl(self, pos=(170, 110), size=(50, 25))
+        self.temper_up = wx.TextCtrl(self, -1, "180", pos=(170, 110), size=(50, 25))
         
         self.sendButton = wx.Button(self, label='send', pos=(230, 10), size=(50, 25))
         self.sendButton.Bind(wx.EVT_BUTTON, session.change_frequency)
@@ -59,19 +59,19 @@ class DemoFrame(wx.Frame):
             self.list.InsertColumn(col, text)
 
         # add the rows
-        for row, item in enumerate(data.rows):
-            index = self.list.InsertStringItem(666666666, item[0])
-            for col, text in enumerate(item[1:]):
-                # print(col,text)
-                self.list.SetStringItem(index, col+1, text)
+        # for row, item in enumerate(data.rows):
+        #     index = self.list.InsertStringItem(666666666, item[0])
+        #     for col, text in enumerate(item[1:]):
+        #         # print(col,text)
+        #         self.list.SetStringItem(index, col+1, text)
 
-            # give each item a random image
-            img = random.randint(0, il_max)
-            self.list.SetItemImage(index, img, img)
+        #     # give each item a random image
+        #     img = random.randint(0, il_max)
+        #     self.list.SetItemImage(index, img, img)
 
-            # set the data value for each item to be its position in
-            # the data list
-            self.list.SetItemData(index, row)
+        #     # set the data value for each item to be its position in
+        #     # the data list
+        #     self.list.SetItemData(index, row)
             
                 
         # set the width of the columns in various ways

@@ -12,6 +12,12 @@ class Data:
         self.name = name
         self.sleep_time = sleep_time
         self.index = index
+        self.blood_pressure_up = 180
+        self.blood_pressure_down = 100
+        self.breath_up = 180
+        self.breath_down = 100
+        self.temper_up = 42
+        self.temper_down = 36
         self.login()
         self.receive()
         print("asd")
@@ -28,7 +34,7 @@ class Data:
             sleep(self.sleep_time)
             heartbeat_freq = randint(50,110)
             blood_pressure = randint(50, 180)
-            temper = 36 + random()*6
+            temper = randint(3500,4200)/100.0
             alarm = 1
             con.write(('senddata ' + str(self.index) + ' '
                     + str(self.name) + ' ' 
@@ -47,7 +53,7 @@ class Data:
                 result = result.decode().split(' ')
                 if result[0] == "frecuency":
                     try:
-                        self.sleep_time = int(result[1])
+                        self.sleep_time = int(result[2])
                     except:
                         pass
                 elif result[0] == "Success":

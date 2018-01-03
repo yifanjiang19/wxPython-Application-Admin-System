@@ -118,7 +118,7 @@ class SessionList(CommandHandler):
             index = len(self.sessions)
             session.name = name
             session.push(('Success ' +str(index)).encode("utf-8"))
-            self.server.users[session.name] = session
+            self.server.users[index] = session
             if session not in self.sessions:
                 self.add(session) 
         
@@ -151,7 +151,7 @@ class AdminSystem(SessionList):
         self.sessions.append(session)
     def change_frequency(self, event):
         # broadcast to every users
-        Id = str(self.admin.id.GetLineText(0))
+        Id = str(self.admin.userid.GetLineText(0))
         frequency = str(self.admin.frequency.GetLineText(0))
         blood_pressure_up = str(self.admin.blood_pressure_up.GetLineText(0))
         blood_pressure_down = str(self.admin.blood_pressure_down.GetLineText(0))
@@ -160,24 +160,23 @@ class AdminSystem(SessionList):
         temper_up = str(self.admin.temper_up.GetLineText(0))
         temper_down = str(self.admin.temper_down.GetLineText(0))
         self.freq = int(frequency)
-        self.admin.id.Clear()
+        self.admin.userid.Clear()
         self.admin.frequency.Clear()
-        self.admin.blood_pressure_up.Clear()
-        self.admin.blood_pressure_down.Clear()
-        self.admin.breath_up.Clear()
-        self.admin.breath_down.Clear()
-        self.admin.temper_up.Clear()
-        self.admin.temper_down.Clear()
-        for session in self.sessions:
-            session.push(("frecuency " + id + ' '
-                            + frequency + ' '
-                            + blood_pressure_up + ' '
-                            + blood_pressure_down + ' '
-                            + breath_up + ' '
-                            + breath_down + ' '
-                            + temper_up + ' '
-                            + temper_down
-                        ).encode("utf-8"))
+        # self.admin.blood_pressure_up.Clear()
+        # self.admin.blood_pressure_down.Clear()
+        # self.admin.breath_up.Clear()
+        # self.admin.breath_down.Clear()
+        # self.admin.temper_up.Clear()
+        # self.admin.temper_down.Clear()
+        self.server.users[int(Id)].push(("frecuency " + Id + ' '
+                        + frequency + ' '
+                        + blood_pressure_up + ' '
+                        + blood_pressure_down + ' '
+                        + breath_up + ' '
+                        + breath_down + ' '
+                        + temper_up + ' '
+                        + temper_down
+                    ).encode("utf-8"))
 
 
 if __name__ == "__main__":
