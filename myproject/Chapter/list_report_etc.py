@@ -1,6 +1,7 @@
 import wx
 import sys, glob, random
 import data
+from file import FileFrame
 class DemoFrame(wx.Frame):
     def __init__(self, session):
         wx.Frame.__init__(self, None, -1,
@@ -29,9 +30,17 @@ class DemoFrame(wx.Frame):
         
         self.sendButton = wx.Button(self, label='send', pos=(230, 10), size=(50, 25))
         self.sendButton.Bind(wx.EVT_BUTTON, session.change_frequency)
+
+        self.openButton = wx.Button(self, label='打开日志', pos=(330, 10), size=(100, 25))
+        self.openButton.Bind(wx.EVT_BUTTON, self.openfile)
+
         self.MakeMenu()
         self.MakeListCtrl()
 
+    def openfile(self, evt):
+        print(123)
+        files = FileFrame()
+        files.Show()
 
     def MakeListCtrl(self, otherflags=0):
         # if we already have a listctrl then get rid of it
@@ -150,7 +159,7 @@ class DemoFrame(wx.Frame):
             color = (196, 20, 27, 255)
             self.list.SetItemTextColour(index, color)
         else:
-            color = (0, 0, 0, 0)
+            color = (0, 0, 0, 255)
             self.list.SetItemTextColour(index, color)
 
 

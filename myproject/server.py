@@ -6,7 +6,7 @@ from gui import *
 from Chapter.list_report_etc import *
 from time import sleep
 import _thread as thread
-from db import User, db_connect
+# from db import User, db_connect
 
 class CentralServer(asyncore.dispatcher):
     """
@@ -200,8 +200,8 @@ class AdminSystem(SessionList):
 if __name__ == "__main__":
     app = wx.App(False)
     port = 6666
-    global db_session
-    db_session = db_connect()
+    # global db_session
+    # db_session = db_connect()
     sess = CentralServer(port)
     try:
         print("chat serve run at '0.0.0.0:{0}'".format(port))
