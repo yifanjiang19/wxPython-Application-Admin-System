@@ -7,5 +7,5 @@
 - wxPython4.0
 - telnetlib
 
-![](assets/flow.png)
-![](assets/GUI.png)
+<img src="assets/flow.png" width=50%></img>
+<img src="assets/GUI.png" width=50%></img>
