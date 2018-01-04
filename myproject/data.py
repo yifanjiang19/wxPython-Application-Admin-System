@@ -1,9 +1,8 @@
 
 # Just some simple data structures for the report mode listctrl examples
 
-columns = ["Index", "User ID", "血压", "呼吸", "体温"]
+columns = ["index", "name", "blooad pressure", "breath", "temper"]
 
-rows = []
 row = [
     ("987441", "additions to RTTI?", "2004-07-08 10:22", "g00fy"),
     ("846368", "wxTextCtrl - disable auto-scrolling", "2003-11-20 21:25", "ryannpcs"),

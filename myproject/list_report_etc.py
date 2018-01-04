@@ -137,22 +137,30 @@ class DemoFrame(wx.Frame):
                 temp.append(self.list.GetItem(i,0).Text)
             except:
                 pass
+        print(2)
         if data[0] in temp:
             index = temp.index(data[0])
         else:
             index = self.list.InsertItem(666666666, data[0])
             self.list.SetItem(index, 1, data[1])
         del temp
+        print(3)
         for col, text in enumerate(data[3:]):
             # print(index,col,text)
             self.list.SetItem(index, col+2, text)
+        print(4)
         if int(data[2]):
+            print("a")
             color = (196, 20, 27, 255)
+            print("a")
             self.list.SetItemTextColour(index, color)
+            print(5)
         else:
+            print("b")
             color = (0, 0, 0, 0)
+            print("b")
             self.list.SetItemTextColour(index, color)
-
+            print(5)
 
 
     def OnExit(self, evt):

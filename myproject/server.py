@@ -6,7 +6,7 @@ from gui import *
 from Chapter.list_report_etc import *
 from time import sleep
 import _thread as thread
-
+from db import User, db_connect
 
 class CentralServer(asyncore.dispatcher):
     """
@@ -54,7 +54,8 @@ class ReceiveSession(asynchat.async_chat):
         try:
             self.system.handle(self, line.encode("utf-8"))
         # 退出聊天室的处理
-        except EndSession:
+        except:
+            print("error")
             self.handle_close()
 
 class EndSession:
@@ -125,6 +126,23 @@ class SessionList(CommandHandler):
     def do_senddata(self, session, data):
         data = data.split(' ')
         data = [data[0]] + [session.name] + data[2:]
+        print(data)
+        file = open("t.txt", "a")
+        for d in data:
+            file.writelines(d + " ")
+        file.writelines("\n")
+        file.close()
+        # user = User(
+        #             # id = 1,
+        #             index = data[0],
+        #             name = data[1],
+        #             alarm = data[2],
+        #             blood_pressure = data[3],
+        #             breath = data[4],
+        #             temper = data[5])
+        # db_session.add(user)
+        # db_session.commit()
+        # db_session.close()
         self.admin.AddList(data)
         
 
@@ -182,6 +200,8 @@ class AdminSystem(SessionList):
 if __name__ == "__main__":
     app = wx.App(False)
     port = 6666
+    global db_session
+    db_session = db_connect()
     sess = CentralServer(port)
     try:
         print("chat serve run at '0.0.0.0:{0}'".format(port))

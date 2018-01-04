@@ -40,7 +40,7 @@ class DemoFrame(wx.Frame):
 
         # add the rows
         for row, item in enumerate(data.rows):
-            index = self.list.InsertStringItem(9223372036854775807, item[0])
+            index = self.list.InsertStringItem(sys.maxint, item[0])
             for col, text in enumerate(item[1:]):
                 print(col,text)
                 self.list.SetStringItem(index, col+1, text)
