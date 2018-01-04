@@ -26,24 +26,24 @@ class FileFrame(wx.Frame):
         self.bbox.Add(self.hbox, proportion=0, flag=wx.EXPAND | wx.ALL)
         self.bbox.Add(self.contents, proportion=1, flag=wx.EXPAND | wx.LEFT | wx.BOTTOM | wx.RIGHT, border=5)
         self.bkg.SetSizer(self.bbox)
+        # self.openFile(wx.EVT_BUTTON)
 
 
     def openFile(self, evt):
-        print(1234)
-        # dlg = wx.FileDialog(
-        #     win,
-        #     "Open",
-        #     "",
-        #     "",
-        #     "All files (*.*)|*.*",
-        #     wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
-        # filepath = ''
-        # if dlg.ShowModal() == wx.ID_OK:
-        #     filepath = dlg.GetPath()
-        # else:
-        #     return
-        filepath = "/Users/yifan/Desktop/SoftwareProject/myproject/t.txt"
-        # self.filename.SetValue(filepath)
+        dlg = wx.FileDialog(
+            self,
+            "Open",
+            "",
+            "",
+            "All files (*.*)|*.*",
+            wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
+        filepath = ''
+        if dlg.ShowModal() == wx.ID_OK:
+            filepath = dlg.GetPath()
+        else:
+            return
+        filepath = "/Users/yifan/Desktop/SoftwareProject/myproject/1.txt"
+        self.filename.SetValue(filepath)
         fopen = open(filepath)
         fcontent = fopen.read()
         self.contents.SetValue(fcontent)

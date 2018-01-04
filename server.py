@@ -2,8 +2,7 @@
 # -*- coding: UTF-8 -*-
 import asynchat
 import asyncore
-from gui import *
-from Chapter.list_report_etc import *
+from list_report_etc import *
 from time import sleep
 import _thread as thread
 # from db import User, db_connect
@@ -120,6 +119,7 @@ class SessionList(CommandHandler):
             session.name = name
             session.push(('Success ' +str(index)).encode("utf-8"))
             self.server.users[index] = session
+            self.server.users[name] = session
             if session not in self.sessions:
                 self.add(session) 
         
@@ -127,7 +127,7 @@ class SessionList(CommandHandler):
         data = data.split(' ')
         data = [data[0]] + [session.name] + data[2:]
         print(data)
-        file = open("t.txt", "a")
+        file = open( data[0] + ".txt", "a")
         for d in data:
             file.writelines(d + " ")
         file.writelines("\n")
@@ -178,14 +178,6 @@ class AdminSystem(SessionList):
         temper_up = str(self.admin.temper_up.GetLineText(0))
         temper_down = str(self.admin.temper_down.GetLineText(0))
         self.freq = int(frequency)
-        # self.admin.userid.Clear()
-        # self.admin.frequency.Clear()
-        # self.admin.blood_pressure_up.Clear()
-        # self.admin.blood_pressure_down.Clear()
-        # self.admin.breath_up.Clear()
-        # self.admin.breath_down.Clear()
-        # self.admin.temper_up.Clear()
-        # self.admin.temper_down.Clear()
         self.server.users[int(Id)].push(("frecuency " + Id + ' '
                         + frequency + ' '
                         + blood_pressure_up + ' '

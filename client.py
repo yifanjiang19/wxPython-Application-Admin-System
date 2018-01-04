@@ -4,6 +4,7 @@ import wx
 import telnetlib
 import sys
 import _thread as thread
+import time
 from time import sleep
 from random import randint, random
 
@@ -26,6 +27,10 @@ class Data:
     def login(self):
         print("login")
         con.open("127.0.0.1", port=6666, timeout=10)
+        try:
+            temp = int(name)
+        except:
+            print("user")
         con.write(('login '+ str(self.name) + '\r\n').encode("utf-8"))
     
     def send(self):
@@ -36,13 +41,14 @@ class Data:
             breath = randint(50, 180)
             temper = randint(3500,4200)/100.0
             alarm = self.is_alarmed(blood_pressure, breath, temper)
-            print(alarm)
+            localtime = time.asctime( time.localtime(time.time()) )
             con.write(('senddata ' + str(self.index) + ' '
                     + str(self.name) + ' ' 
                     + str(alarm) + ' '
                     + str(blood_pressure) + ' '
                     + str(breath) + ' ' 
-                    + str(temper) + '\r\n').encode("utf-8"))
+                    + str(temper) + ' '
+                    + str(localtime) + '\r\n').encode("utf-8"))
     
     def is_alarmed(self, blood_pressure, breath, temper):
         if blood_pressure < self.blood_pressure_down or blood_pressure > self.blood_pressure_up:
